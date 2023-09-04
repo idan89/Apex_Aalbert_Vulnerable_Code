@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  pmd-analyser-check:
+  pmd-scan:
     name: PMD Static Code Analysis
     permissions:
       security-events: write
@@ -26,18 +26,18 @@ jobs:
         with:
           rulesets: 'ruleset.xml'
           analyzeModifiedFilesOnly: false
-      - name: Upload SARIF file
+      - name: Upload SARIF file to Github Security
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: pmd-report.sarif
-      - name: Print the final result
-        shell: bash
-        run: |
-          value=`cat pmd-report.sarif`
-          echo The result is $value
+          sarif_file: pmd-report-github.sarif
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pmd-report.sarif
+          path: pmd-report.sarif
   import:
     name: Importation SARIF results to Conviso Platform 
-    needs: pmd-analyser-check
+    needs: pmd-scan
     runs-on: ubuntu-20.04
     container:
       image: convisoappsec/flowcli:1.12.0-rc.2
@@ -48,7 +48,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download result from previous scan
+      - name: Download result from pmd scan
         uses: actions/download-artifact@v3
         with:
           name: pmd-report.sarif
