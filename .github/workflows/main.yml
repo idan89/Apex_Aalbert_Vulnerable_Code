@@ -46,8 +46,8 @@ jobs:
       - name: Download result from previous scan
         uses: actions/download-artifact@v3
         with:
-          name: pmd-output.sarif
+          name: pmd-report.sarif
 
       - name: SARIF Importation
         run: |
-          conviso findings import-sarif --input-file pmd-output.sarif
+          conviso findings import-sarif --input-file pmd-report.sarif
