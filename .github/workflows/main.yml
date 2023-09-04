@@ -30,6 +30,11 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: pmd-report.sarif
+      - name: Print the final result
+        shell: bash
+        run: |
+          value=`cat pmd-report.sarif`
+          echo The result is $value
   import:
     name: Importation SARIF results to Conviso Platform 
     needs: pmd-analyser-check
