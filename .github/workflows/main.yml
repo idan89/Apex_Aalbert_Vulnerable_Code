@@ -42,7 +42,7 @@ jobs:
     needs: pmd-scan
     runs-on: ubuntu-20.04
     container:
-      image: convisoappsec/convisoli:latest
+      image: convisoappsec/convisocli:latest
       env:
         CONVISO_API_KEY: ${{secrets.CONVISO_API_KEY}}
     steps:
